@@ -4,3 +4,9 @@ cabal-dev
 *.hi
 *.chi
 *.chs.h
+
+*~
+*.*~
+\#*
+*.exe
+ext
