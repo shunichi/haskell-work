@@ -37,7 +37,7 @@ factor = pexpr <|> nat
     factor := '(' expr ')' | nat
 
     左再帰除去
-	expr := term ('+' term | e)*
+    expr := term ('+' term | e)*
     term := factor ('*' factor | e)*
     factor := '(' expr ')' | nat
 -}
@@ -46,8 +46,7 @@ exprL :: Parser Expr
 exprL = foldl Add <$> termL <*> many (char '+' *> termL)
 
 termL :: Parser Expr
-termL = do f <- factorL
-           foldl Mul f <$> many (char '*' *> factorL)
+termL = foldl Mul <$> factorL <*> many (char '*' *> factorL)
 
 factorL :: Parser Expr
 factorL = pexpr <|> nat
