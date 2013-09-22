@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleContexts #-}
 
-module Token (identifier, natural, symbol, brackets, lexeme) where
+module Token (identifier, natural, symbol, reserved, brackets, lexeme) where
 
 import Text.Parsec
 import qualified Text.Parsec.Token as T
@@ -17,7 +17,7 @@ cgStyle = T.LanguageDef
     , T.opStart	 = T.opLetter cgStyle
     , T.opLetter	 = oneOf "!%&*+/<=>?^|-~"
     , T.reservedOpNames= []
-    , T.reservedNames  = []
+    , T.reservedNames  = ["struct"]
     , T.caseSensitive  = True }
 
 lexer :: (Stream s m Char) => T.GenTokenParser s u m
@@ -34,6 +34,9 @@ symbol = T.symbol lexer
 
 brackets :: (Stream s m Char) => ParsecT s u m a -> ParsecT s u m a
 brackets = T.brackets lexer
+
+reserved :: (Stream s m Char) => String -> ParsecT s u m ()
+reserved = T.reserved lexer
 
 lexeme :: (Stream s m Char) => ParsecT s u m a -> ParsecT s u m a
 lexeme = T.lexeme lexer
